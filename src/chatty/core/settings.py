@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from django.db.backends.postgresql.psycopg_any import IsolationLevel
 
 # call the load_dotenv() function
 load_dotenv('../../.env')
@@ -111,14 +112,16 @@ WSGI_APPLICATION = "core.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
+        "OPTIONS": {
+        "isolation_level": IsolationLevel.SERIALIZABLE,
+        },
         "NAME": os.getenv(f"{DATABASE_PREFIX}DB"),
         "USER": os.getenv(f"{DATABASE_PREFIX}USER"),
         "PASSWORD": os.getenv(f"{DATABASE_PREFIX}PASSWORD"),
-        "HOST": os.getenv(f"127.0.0.1"),
-        "PORT": os.getenv(f"5432")
+        "HOST": "127.0.0.1",
+        "PORT": "5432"
     }
 }
-
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -153,4 +156,67 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 30
+}
+
+
+# configure logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '[%(asctime)s] {%(module)s} [%(levelname)s] - %(message)s',
+            'datefmt': '%d-%m-%Y %H:%M:%S'
+        },
+    },
+
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard'
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'log/debug.log',
+            'formatter': 'standard'
+        },
+
+    },
+    'loggers': {
+
+        'core': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+
+        'api': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.server': {
+            'handlers': ['console', 'file'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+
+        'django.db.backends': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        }
+    }
 }
