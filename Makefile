@@ -7,9 +7,9 @@ else
 endif
 
 SETTINGS_FILENAME = pyproject.toml
-DRF_PACKAGENAME = ...
+DRF_PACKAGENAME = chatty
 
-PHONY = help install install-dev build format lint type-check secure test install-flit enable-pre-commit-hooks run
+PHONY = help install install-dev build format lint type-check secure test install-flit enable-pre-commit-hooks run make-migrations
 
 help:
 	@echo "--------------- HELP ---------------"
@@ -69,4 +69,7 @@ test-integration:
 	${PYTHON} -m pytest -svvv -m "integration" tests
 
 run:
-	${PYTHON} -m src.${DRF_PACKAGENAME}.main
+	${PYTHON} -m src.chatty.manage runserver
+
+make-migrations:
+	${PYTHON} manage.py makemigrations
