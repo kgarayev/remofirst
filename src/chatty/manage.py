@@ -15,6 +15,7 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
+    sys.argv = ['/Users/arifgarayev/remofirst-ag-techtask/src/chatty/manage.py', 'runserver']
     execute_from_command_line(sys.argv)
 
 

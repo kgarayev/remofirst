@@ -72,4 +72,5 @@ run:
 	${PYTHON} -m src.chatty.manage runserver
 
 make-migrations:
-	${PYTHON} manage.py makemigrations
+	${PYTHON} -m src.chatty.manage makemigrations
+	${PYTHON} -m src.chatty.manage migrate

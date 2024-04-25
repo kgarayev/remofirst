@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 
-from src.chatty.api.user.models.base import BaseModel
+from src.chatty.api.user.domain.models.base import BaseModel
 
 
 class User(AbstractUser, BaseModel):
