@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from django.db.backends.postgresql.psycopg_any import IsolationLevel
+# from django.db.backends.postgresql.psycopg_any import IsolationLevel
 from dotenv import load_dotenv
 
 # call the load_dotenv() function
@@ -36,7 +36,7 @@ else:
 
 
 # no domain-name, only local development
-ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]", "nginx"]
+ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]", "nginx", '0.0.0.0']
 
 
 INTERNAL_IPS = ["127.0.0.1"]
@@ -66,13 +66,13 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # additional middlewares
-    "corsheaders.middleware.CorsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
@@ -107,7 +107,6 @@ WSGI_APPLICATION = "core.infrastructure.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "OPTIONS": {"isolation_level": IsolationLevel.SERIALIZABLE},
         "NAME": os.getenv(f"{DATABASE_PREFIX}DB"),
         "USER": os.getenv(f"{DATABASE_PREFIX}USER"),
         "PASSWORD": os.getenv(f"{DATABASE_PREFIX}PASSWORD"),
@@ -239,3 +238,4 @@ PASSWORD_HASHERS = ["django.contrib.auth.hashers.BCryptSHA256PasswordHasher"]
 
 AUTH_USER_MODEL = "user.User"
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
