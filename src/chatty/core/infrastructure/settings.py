@@ -5,7 +5,7 @@ from django.db.backends.postgresql.psycopg_any import IsolationLevel
 from dotenv import load_dotenv
 
 # call the load_dotenv() function
-load_dotenv(".env")
+load_dotenv("../../.env")
 
 ENV_PREFIX = "DJANGO_"
 DATABASE_PREFIX = "POSTGRES_"
@@ -59,8 +59,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "drf_spectacular",
     # custom created apps
-    "src.chatty.api.user",
-    "src.chatty.api.chat",
+    "api.user",
+    "api.chat",
 ]
 
 MIDDLEWARE = [
@@ -81,7 +81,7 @@ SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 SESSION_COOKIE_HTTPONLY = True
 
 # root url conf module
-ROOT_URLCONF = "src.chatty.core.routers.urls"
+ROOT_URLCONF = "core.routers.urls"
 
 
 TEMPLATES = [
@@ -100,7 +100,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "src.chatty.core.infrastructure.wsgi.application"
+WSGI_APPLICATION = "core.infrastructure.wsgi.application"
 
 
 # Database config
@@ -182,12 +182,12 @@ LOGGING = {
             "level": "DEBUG",
             "propagate": True,
         },
-        "src.chatty.api.user": {
+        "api.user": {
             "handlers": ["console", "file"],
             "level": "DEBUG",
             "propagate": True,
         },
-        "src.chatty.api.chat": {
+        "api.chat": {
             "handlers": ["console", "file"],
             "level": "DEBUG",
             "propagate": True,
@@ -236,3 +236,6 @@ REST_FRAMEWORK = {
 
 
 PASSWORD_HASHERS = ["django.contrib.auth.hashers.BCryptSHA256PasswordHasher"]
+
+AUTH_USER_MODEL = "user.User"
+

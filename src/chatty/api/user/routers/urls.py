@@ -1,6 +1,6 @@
 from rest_framework.routers import DefaultRouter
 from django.urls import include, path
-from src.chatty.api.user.routers.views import RegisterUser, LoginUser
+from api.user.routers.views import RegisterUser, LoginUser
 
 
 urlpatterns = [

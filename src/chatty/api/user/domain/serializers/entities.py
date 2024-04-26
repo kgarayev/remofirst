@@ -2,8 +2,8 @@ from django.contrib.auth.password_validation import validate_password
 from django.db import transaction
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-
-from src.chatty.api.user.domain.models.models import User as UserModel
+from api.chat.models import Session, Message
+from api.user.domain.models.models import User as UserModel
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -75,6 +75,9 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data["password"])
         user.save()
         # FIXME create chat session room automatically here; and add user.id to the room
+
+        room_session = Session.objects.create()
+        room_session.members.add(user.id)
         return user
 
 

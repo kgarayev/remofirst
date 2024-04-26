@@ -1,9 +1,1 @@
-from django.contrib.auth.models import AbstractUser
-
-from src.chatty.api.user.domain.models.base import BaseModel
-
-
-class User(AbstractUser, BaseModel):
-
-    class Meta:
-        db_table = "users"
+from api.user.models import User
