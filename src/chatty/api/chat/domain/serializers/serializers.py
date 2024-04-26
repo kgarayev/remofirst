@@ -10,22 +10,24 @@ class SessionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Session
-        exclude = ['id']
+        # fields = ['users']
+        exclude = ['id', 'updated_at']
 
     def create(self, validated_data):
-        member = validated_data.pop('members')
-        session = Session.objects.create(**validated_data)
+        member = validated_data.pop('users')
+        session = Session.objects.create()
         session.members.set(member)
 
         return session
     
 class MessageSerializer(serializers.ModelSerializer):
     
-    sender_firstname = serializers.SerializerMethodField()
+    sender_fullname = serializers.SerializerMethodField()
 
     class Meta:
         model = Message
         exclude = ['id', 'session_id']
 
-    def get_sender_firstname(self, obj):
+
+    def get_sender_fullname(self, obj):
         return f"{obj.sender.first_name} {obj.sender.last_name}"

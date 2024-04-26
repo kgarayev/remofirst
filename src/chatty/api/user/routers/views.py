@@ -9,12 +9,27 @@ from rest_framework.renderers import JSONRenderer
 from api.user.domain.models.models import User as UserModel
 from api.user.domain.serializers.entities import RegisterUserSerializer, LoginSerializer, UserSerializer
 
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
+
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 class RegisterUser(CreateAPIView):
 
     permission_classes = [AllowAny]
     serializer_class = RegisterUserSerializer
     queryset = UserModel.objects.all()
+
+class LogoutUser(APIView):
+    parser_classes = [JSONParser]
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication]  
+
+
+    def post(self, request):
+        request.session.flush()
+        return Response({'logout': 'success'}, status=200)
 
 class LoginUser(APIView):
 
@@ -24,6 +39,7 @@ class LoginUser(APIView):
     # renderer_classes = [JSONRenderer]
 
 
+    @swagger_auto_schema(request_body=LoginSerializer)
     def post(self, request):
         
         serializer = self.serializer_class(data=request.data)

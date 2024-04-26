@@ -18,4 +18,7 @@ class Message(BaseModel):
     session_id = models.ForeignKey(Session, on_delete=models.SET_NULL, related_name="messages", null=True)
     sender = models.ForeignKey(UserModel, on_delete=models.SET_NULL, related_name="sent_messages", null=True)
     message = models.TextField(null=False, blank=False)
+
+
+    
     

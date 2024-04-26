@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     # rest
     "rest_framework",
-    "drf_spectacular",
+    "drf_yasg",
     # custom created apps
     "api.user",
     "api.chat",
@@ -87,7 +87,7 @@ ROOT_URLCONF = "core.routers.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": ["src/chatty/templates"],
+        "DIRS": ["templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -214,16 +214,14 @@ LOGGING = {
     },
 }
 
+
 REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 30,
+
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
     ],
-    "DEFAULT_PARSER_CLASSES": [
-        "rest_framework.parsers.JSONParser",
-    ],
-}
-
-REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
 
         "rest_framework.authentication.SessionAuthentication",
