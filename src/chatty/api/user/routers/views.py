@@ -12,15 +12,24 @@ from api.user.domain.serializers.entities import RegisterUserSerializer, LoginSe
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 
+from django.utils.decorators import method_decorator
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
+
+@method_decorator(name='post', decorator=swagger_auto_schema(
+    operation_description="Register a simple user based on django.contrib.auth.models.User."
+))
 class RegisterUser(CreateAPIView):
 
     permission_classes = [AllowAny]
     serializer_class = RegisterUserSerializer
     queryset = UserModel.objects.all()
 
+
+@method_decorator(name='post', decorator=swagger_auto_schema(
+    operation_description="Logout django.contrib.auth.models.User and clear signed session cookies."
+))
 class LogoutUser(APIView):
     parser_classes = [JSONParser]
     permission_classes = [IsAuthenticated]
@@ -31,6 +40,7 @@ class LogoutUser(APIView):
         request.session.flush()
         return Response({'logout': 'success'}, status=200)
 
+
 class LoginUser(APIView):
 
     permission_classes = [AllowAny]
@@ -39,7 +49,7 @@ class LoginUser(APIView):
     # renderer_classes = [JSONRenderer]
 
 
-    @swagger_auto_schema(request_body=LoginSerializer)
+    @swagger_auto_schema(request_body=LoginSerializer, operation_description="Login an existing django.contrib.auth.models.User and create a signed session cookie on the client side.")
     def post(self, request):
         
         serializer = self.serializer_class(data=request.data)
