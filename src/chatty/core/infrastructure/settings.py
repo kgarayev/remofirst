@@ -44,7 +44,13 @@ INTERNAL_IPS = ["127.0.0.1"]
 
 # Application definition
 INSTALLED_APPS = [
+    'channels',
+    
     'daphne',
+    
+    "api.user",
+    "api.chat",
+    
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -60,8 +66,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "drf_yasg",
     # custom created apps
-    "api.user",
-    "api.chat",
+    
 ]
 
 MIDDLEWARE = [

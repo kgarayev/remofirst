@@ -68,3 +68,11 @@ class LoginUser(APIView):
 
         
         return Response(serializer.errors, status=400)
+    
+
+class GetCookies(APIView):
+
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        return Response(request.COOKIES, status=200)

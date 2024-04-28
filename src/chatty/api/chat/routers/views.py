@@ -110,6 +110,20 @@ class SendMessageView(APIView):
         
         
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            print(serializer.data)
+            print(type(serializer.data))
+            try:
+                request.kafka_producer.send('send_message', 
+                                            value=
+                                            {
+                                                'sender_id': str(request.user.id),
+                                                'message_body': serializer.data['message'],
+                                                'chat_session_id': str(serializer.data['session_id']),   
+                                                'COOKIES': request.COOKIES
+                                            })
+                
+            except Exception as e:
+                return Response({'error': f'An error occurred while sending message. {e}'}, status=status.HTTP_400_BAD_REQUEST)
+
+            return Response({'status': 'sucsess', 'data': serializer.data}, status=status.HTTP_201_CREATED)
+        return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

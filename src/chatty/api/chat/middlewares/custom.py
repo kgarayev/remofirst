@@ -1,4 +1,4 @@
-from src.chatty.api.chat.broker.kafka_broker import KafkaProduce
+from api.chat.broker.kafka_broker import KafkaProduce
 from django.utils.deprecation import MiddlewareMixin
 import os
 import json
@@ -23,9 +23,8 @@ class ApplyKafkaProducerMiddleware(MiddlewareMixin):
 
             # inject new attribute to request object
             request.kafka_producer = KafkaProduce(bootstrap_servers=os.getenv('KAFKA_BOOTSTRAP_SERVERS'), 
-            client_id=os.getenv('KAFKA_CLIENT_ID'), 
-            key_serializer=json.dumps,
-            value_serializer=json.dumps,
+            client_id=os.getenv('KAFKA_PRODUCER_CLIENT_ID'), 
+            value_serializer=lambda m: json.dumps(m).encode('ascii'),
             retries=os.getenv('KAFKA_PRODUCER_RETRIES'))
 
             print(request.kafka_producer)

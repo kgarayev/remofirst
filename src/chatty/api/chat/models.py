@@ -6,7 +6,7 @@ from api.user.domain.models.base import BaseModel
 
 class Session(BaseModel):
     
-    members = models.ManyToManyField(UserModel, related_name="chat_sessions")
+    members = models.ManyToManyField(UserModel)
 
 
     def __str__(self):
