@@ -5,7 +5,8 @@ from rest_framework.schemas import AutoSchema
 from rest_framework.generics import ListAPIView
 from rest_framework.pagination import LimitOffsetPagination
 from api.chat.models import Session, Message
-from api.chat.domain.serializers.serializers import SessionSerializer, MessageSerializer
+from rest_framework.views import exception_handler
+from api.chat.domain.serializers.serializers import SessionSerializer, MessageSerializer, SendMessageSerializer
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import JSONParser
@@ -15,7 +16,7 @@ from drf_yasg.utils import swagger_auto_schema
 
 
 @method_decorator(name='get', decorator=swagger_auto_schema(
-    operation_description="Get all messages for the provided chat session."
+    operation_description="Get all messages for the provided chat session for authenticated user only."
 ))
 class ChatMessageView(ListAPIView):
 
@@ -24,11 +25,33 @@ class ChatMessageView(ListAPIView):
     serializer_class = MessageSerializer
     pagination_class = LimitOffsetPagination
 
+    # def filter_queryset(self, queryset):
+    #     # # filter queryset to exclude messages that are not sent by the authenticated user
+    #     # exclude = []
 
+    #     # for i, message in enumerate(queryset):
+    #     #     if message.sender != self.request.user:
+    #     #         exclude.append(i)
+
+        
     
     def get_queryset(self):
         session_id = self.kwargs.get('session_id')
-        return Message.objects.filter(session_id_id=session_id)
+        q = Message.objects.filter(session_id_id=session_id).filter(sender=self.request.user)
+        return q
+    
+    def handle_exception(self, exc):
+        return Response(super().handle_exception(exc), status=status.HTTP_400_BAD_REQUEST)
+    
+    def get(self, request, *args, **kwargs):
+        
+        try:
+            return super().get(request, *args, **kwargs)
+        except Exception as e:
+            return Response({'error': f'An error occurred while fetching messages. {e}'}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+
     
 
 class ChatSessionGetView(APIView):
@@ -36,12 +59,20 @@ class ChatSessionGetView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [SessionAuthentication]    
 
-    @swagger_auto_schema(operation_description="Get all chat sessions for the authenticated user.")
+    @swagger_auto_schema(operation_description="Get all chat sessions for the authenticated user. Can get only authenticated user's chat sessions.")
     def get(self, request, user_id):
-        session = Session.objects.filter(members=user_id)
+        
+        if user_id != str(request.user.id):
+            return Response({'error': 'You can only get your own chat sessions.'}, status=status.HTTP_403_FORBIDDEN)
+        
+        session = Session.objects.filter(members=request.user.id)
         serializer = SessionSerializer(session, many=True, context={'request': request})
         
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            return Response({'error': f'An error occurred while fetching chat sessions. {e}'}, status=status.HTTP_400_BAD_REQUEST)
     
     
 class ChatSessionPostView(APIView):    
@@ -58,6 +89,25 @@ class ChatSessionPostView(APIView):
     def post(self, request):
 
         serializer = SessionSerializer(data=request.data, context={'request': request})
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class SendMessageView(APIView):
+    
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication]
+    serializer_class = SendMessageSerializer
+    
+
+    @swagger_auto_schema(request_body=SendMessageSerializer, 
+                         operation_description="Send a message to a chat session asynchronously... ")
+    def post(self, request):
+        serializer = SendMessageSerializer(data=request.data, context={'request': request})
+        
         
         if serializer.is_valid():
             serializer.save()

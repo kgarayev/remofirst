@@ -11,7 +11,8 @@ class SessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Session
         # fields = ['users']
-        exclude = ['id', 'updated_at']
+        exclude = ['updated_at']
+        read_only_fields = ['id']
 
     def create(self, validated_data):
         member = validated_data.pop('users')
@@ -31,3 +32,20 @@ class MessageSerializer(serializers.ModelSerializer):
 
     def get_sender_fullname(self, obj):
         return f"{obj.sender.first_name} {obj.sender.last_name}"
+    
+
+class SendMessageSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Message
+        fields = ['message', 'session_id']
+        read_only_fields = ['sender']
+        
+        extra_kwargs = {
+            'session_id': {'required': True},
+            'message': {'required': True}
+        }
+    
+    def create(self, validated_data):
+        message = Message.objects.create(**validated_data, sender=self.context['request'].user)
+        return message

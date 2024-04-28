@@ -1,0 +1,39 @@
+version: '3'
+services:
+  zookeeper:
+    
+    image: zookeeper:3.5.9
+    container_name: zookeeper
+    
+    restart: unless-stopped
+    
+    build:
+      context: .
+      dockerfile: ./ci/zookeeper.Dockerfile
+
+    ports:
+      - '2181:2181'
+
+
+  kafka:
+    
+    depends_on:
+      - zookeeper
+    
+    links:
+      - zookeeper
+
+
+    image: 'wurstmeister/kafka:2.13-2.8.1'
+    container_name: kafka
+    build:
+      context: .
+      dockerfile: ./ci/kafka.Dockerfile
+
+    env_file: .env
+
+    ports:
+      - '9092:9092'
+
+    volumes:
+      - './volumes/kafka/docker.sock:/var/run/docker.sock'

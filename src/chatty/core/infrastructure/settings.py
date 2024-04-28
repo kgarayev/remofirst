@@ -44,6 +44,7 @@ INTERNAL_IPS = ["127.0.0.1"]
 
 # Application definition
 INSTALLED_APPS = [
+    'daphne',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -64,6 +65,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    
+    'api.chat.middlewares.custom.ApplyKafkaProducerMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
@@ -74,6 +77,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # additional middlewares
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    
 ]
 
 # signed cookies enabled
@@ -145,15 +149,6 @@ STATIC_URL = "src/chatty/static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # config pagination rules
-REST_FRAMEWORK = {
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 30,
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    "DEFAULT_RENDERER_CLASSES": [
-        "rest_framework.renderers.JSONRenderer",
-        "rest_framework.renderers.BrowsableAPIRenderer",
-    ],
-}
 
 
 SPECTACULAR_SETTINGS = {
@@ -228,7 +223,8 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     
-    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'EXCEPTION_HANDLER': 'api.chat.exceptions.generic.custom_exception_handler'
 }
 
 
@@ -237,3 +233,5 @@ PASSWORD_HASHERS = ["django.contrib.auth.hashers.BCryptSHA256PasswordHasher"]
 AUTH_USER_MODEL = "user.User"
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+ASGI_APPLICATION = "core.infrastructure.asgi.application"
