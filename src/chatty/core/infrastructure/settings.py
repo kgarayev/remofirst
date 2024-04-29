@@ -5,19 +5,18 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 # call the load_dotenv() function
-load_dotenv("../../.env")
+load_dotenv(".env")
 
 ENV_PREFIX = "DJANGO_"
 DATABASE_PREFIX = "POSTGRES_"
 
 # define the BASE_DIR for PYTHONPATH
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
-print("PYTHONPATH = ", BASE_DIR)
+print("BASEDIR = ", BASE_DIR)
 
 
 # load from the environment variables
 SECRET_KEY = os.getenv(f"{ENV_PREFIX}SECRET_KEY")
-print(SECRET_KEY)
 
 # load from the environment variables
 try:
@@ -36,7 +35,7 @@ else:
 
 
 # no domain-name, only local development
-ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]", "nginx", '0.0.0.0']
+ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]", "nginx", "0.0.0.0"]
 
 
 INTERNAL_IPS = ["127.0.0.1"]
@@ -44,13 +43,10 @@ INTERNAL_IPS = ["127.0.0.1"]
 
 # Application definition
 INSTALLED_APPS = [
-    'channels',
-    
-    'daphne',
-    
+    "channels",
+    "daphne",
     "api.user",
     "api.chat",
-    
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -66,12 +62,10 @@ INSTALLED_APPS = [
     "rest_framework",
     "drf_yasg",
     # custom created apps
-    
 ]
 
 MIDDLEWARE = [
-    
-    'api.chat.middlewares.custom.ApplyKafkaProducerMiddleware',
+    "api.chat.middlewares.custom.ApplyKafkaProducerMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
@@ -82,7 +76,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # additional middlewares
     "debug_toolbar.middleware.DebugToolbarMiddleware",
-    
 ]
 
 # signed cookies enabled
@@ -214,22 +207,24 @@ LOGGING = {
     },
 }
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 30,
-
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
-
         "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
-    
-    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
-    'EXCEPTION_HANDLER': 'api.chat.exceptions.generic.custom_exception_handler'
+    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    "EXCEPTION_HANDLER": "api.chat.exceptions.generic.custom_exception_handler",
 }
 
 
@@ -237,6 +232,9 @@ PASSWORD_HASHERS = ["django.contrib.auth.hashers.BCryptSHA256PasswordHasher"]
 
 AUTH_USER_MODEL = "user.User"
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 ASGI_APPLICATION = "core.infrastructure.asgi.application"
+
+
+

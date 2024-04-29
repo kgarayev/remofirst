@@ -8,6 +8,6 @@ def custom_exception_handler(exc, context):
 
     # Now add the HTTP status code to the response.
     if response:
-        response.data['status_code'] = 400
+        response.data["status_code"] = 400
 
     return response

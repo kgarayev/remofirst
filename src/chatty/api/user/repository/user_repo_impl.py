@@ -1,6 +1,7 @@
 from api.user.domain.serializers.entities import User
-from chatty.api.user.models import User as UserModel
 from api.user.repository.base import AbstractUserRepository
+
+from chatty.api.user.models import User as UserModel
 
 
 class UserRepository(AbstractUserRepository):

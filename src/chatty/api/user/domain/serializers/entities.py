@@ -1,9 +1,9 @@
+from api.chat.models import Session
+from api.user.domain.models.models import User as UserModel
 from django.contrib.auth.password_validation import validate_password
 from django.db import transaction
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from api.chat.models import Session, Message
-from api.user.domain.models.models import User as UserModel
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -13,28 +13,27 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ["id", "username", "email", "created_at", "updated_at"]
         read_only_fields = ["id", "created_at", "updated_at"]
 
+
 class LoginSerializer(serializers.Serializer):
 
     username = serializers.CharField(required=True)
     password = serializers.CharField(required=True)
 
     class Meta:
-        
+
         fields = ["id", "username", "password"]
-        
-        
 
     def validate(self, data):
         query_set = UserModel.objects.filter(username=data.get("username"))
 
         if not query_set.exists():
             raise serializers.ValidationError("User does not exist.")
-        
+
         user_model = query_set.first()
 
         if not user_model.check_password(data.get("password")):
             raise serializers.ValidationError("Invalid password.")
-        
+
         return data
 
 
@@ -48,7 +47,7 @@ class RegisterUserSerializer(serializers.ModelSerializer):
 
         model = UserModel
 
-        fields = ["id", "username", 'first_name', 'last_name', "email", "password", "password_confirmation", "created_at", "updated_at"]
+        fields = ["id", "username", "first_name", "last_name", "email", "password", "password_confirmation", "created_at", "updated_at"]
         read_only_fields = ["id", "created_at", "updated_at"]
         extra_kwargs = {
             "first_name": {"required": True},
