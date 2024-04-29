@@ -173,4 +173,3 @@ old_benchmarks/
 logs/
 
 # docker volumes
-volumes/
