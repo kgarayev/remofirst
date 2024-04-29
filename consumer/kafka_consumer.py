@@ -30,7 +30,7 @@ class KafkaConsume(KafkaConsumer):
         except Exception as e:
             print(e)
             get_new_session.rollback()
-            get_new_session.exprunge_all()
+            get_new_session.expunge_all()
     
     def send_to_ws(self, message, cookies_dict, ws_host):
 

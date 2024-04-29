@@ -108,6 +108,8 @@ using Django's built-in authentication system</td>
 </table>
 </div>
 
+
+
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 This project is about Real-Time bi directional client communication - more precisely chatting like appication.
@@ -159,9 +161,17 @@ Inspiration was to strictly stick to `DDD` and `Clean Architecture`. Hence some 
   <a href="img/use-case.png">
     <img src="img/use-case.png">
   </a>
-
+  <br />
+  
 <br />
 
+
+<iframe width="680" height="420"
+  src="https://www.youtube.com/embed/P8Bw_ZuU6lc" 
+  frameborder="0" 
+  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+  allowfullscreen>
+</iframe>
 
 ## Entity-relations diagram visualization
 
