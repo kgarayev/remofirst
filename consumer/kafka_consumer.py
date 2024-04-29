@@ -20,14 +20,17 @@ class KafkaConsume(KafkaConsumer):
     
     
     def add_to_table(self, model_cls, message):
+        get_new_session = self.repo.get_session()
         try:
-            self.repo.create(model=model_cls(message=message.get('message_body', 'null'),
+            self.repo.create(get_new_session, model=model_cls(message=message.get('message_body', 'null'),
                                     sender_id=message.get('sender_user_id'),
                                     session_id_id=message.get('chat_session_id'),
                                     )
             )       
         except Exception as e:
             print(e)
+            get_new_session.rollback()
+            get_new_session.exprunge_all()
     
     def send_to_ws(self, message, cookies_dict, ws_host):
 

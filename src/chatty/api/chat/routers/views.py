@@ -1,5 +1,5 @@
 import os
-
+from django.db.models import Q
 from api.chat.domain.serializers.serializers import MessageSerializer, SendMessageSerializer, SessionSerializer
 from api.chat.models import Message, Session
 from django.utils.decorators import method_decorator
@@ -35,7 +35,7 @@ class ChatMessageView(ListAPIView):
 
     def get_queryset(self):
         session_id = self.kwargs.get("session_id")
-        q = Message.objects.filter(session_id_id=session_id).filter(sender=self.request.user)
+        q = Message.objects.filter(session_id_id=session_id)
         return q
 
     def handle_exception(self, exc):

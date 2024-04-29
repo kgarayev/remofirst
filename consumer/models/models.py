@@ -1,12 +1,16 @@
 from sqlalchemy import Column, Integer, String, UUID, TIMESTAMP, ForeignKey, DateTime
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.sql import func
+import sqlalchemy.dialects.postgresql as postgresql
+import uuid
+from sqlalchemy.sql import func
+
 
 class MessageModel(declarative_base()):
     
     __tablename__ = "chat_message"
     
-    id = Column(UUID, primary_key=True, server_default='gen_random_uuid()')
+    id = Column(postgresql.UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True)
 
 
     created_at = Column(DateTime(timezone=True), nullable=False, default=func.now())

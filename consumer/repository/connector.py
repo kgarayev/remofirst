@@ -8,12 +8,13 @@ class Factory:
 
         if not hasattr(self, "engine"):
             self.engine = create_engine(db_uri)
-            self.session = sessionmaker(bind=self.engine)()
+            self.session = sessionmaker(bind=self.engine)
 
-    def create(self, model):
+    def create(self, session, model):
 
-        self.session.add(model)
-        self.session.commit()
+        session.add(model)
+        session.commit()
+        session.expunge_all()
 
     
     def get_session(self):
