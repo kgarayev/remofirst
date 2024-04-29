@@ -76,7 +76,7 @@ make-migrations:
 	${PYTHON} -m src.chatty.manage migrate
 
 build-images:
-	docker-compose -f docker-compose.yml build
+	docker-compose -f docker-compose.yml build 
 
 run-containers:
 	docker-compose -f docker-compose.yml up

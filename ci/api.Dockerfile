@@ -44,5 +44,6 @@ COPY ./src/chatty .
 
 RUN python3 manage.py collectstatic --noinput
 
-CMD ['python3', 'manage.py', 'makemigrations']
-CMD ['python3', 'manage.py', 'migrate']
+RUN chmod +x ./entrypoint.sh
+# CMD ['python3', 'manage.py', 'makemigrations']
+# CMD ['python3', 'manage.py', 'migrate']

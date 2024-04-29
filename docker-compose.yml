@@ -49,7 +49,9 @@ services:
   
     # command: python3 -m gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -b 0.0.0.0:8000 core.infrastructure.wsgi -w 2
 
-    command: python3 manage.py runserver 0.0.0.0:8000
+    # command: python3 manage.py runserver 0.0.0.0:8000
+
+    entrypoint: ["./entrypoint.sh"]
 
 
     volumes: 
