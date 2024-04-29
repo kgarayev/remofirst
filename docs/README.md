@@ -165,13 +165,7 @@ Inspiration was to strictly stick to `DDD` and `Clean Architecture`. Hence some 
   
 <br />
 
-
-<iframe width="680" height="420"
-  src="https://www.youtube.com/embed/P8Bw_ZuU6lc" 
-  frameborder="0" 
-  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-  allowfullscreen>
-</iframe>
+[![Use-case walkthough video](https://img.youtube.com/vi/P8Bw_ZuU6lc/hqdefault.jpg)](https://www.youtube.com/watch?v=P8Bw_ZuU6lc)
 
 ## Entity-relations diagram visualization
 
