@@ -188,18 +188,18 @@ Docker Deamon is used to manage project deployments.
 Docker Deamon must be installed and enabled.
 Make build tool preferred, but not required
 
-* Docker Deamon - GNU/Linux
+Docker Deamon - GNU/Linux
   ```
   apt install docker-ce
   sudo systemctl start docker
   sudo systemctl enable docker
   ````
-* Docker Deamon - MacOS ARM
+Docker Deamon - MacOS ARM
   ```
   curl https://desktop.docker.com/mac/main/arm64/Docker.dmg --output ./Docker.dmg
   ````
 
-* Docker Deamon - MacOS Intel
+Docker Deamon - MacOS Intel
   ```
   curl https://desktop.docker.com/mac/main/amd64/Docker.dmg --output ./Docker.dmg
   ````
@@ -207,13 +207,13 @@ Make build tool preferred, but not required
 
 ### Installation & Deployement
 
-* with Make build tool
+with Make build tool
   ```sh
   make build-images
   make run-containers
   ```
 
-* without Make build tool
+without Make build tool
   ```
   docker-compose -f docker-compose.yml build 
   docker-compose -f docker-compose.yml up
