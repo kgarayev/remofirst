@@ -140,19 +140,47 @@ Inspiration was to strictly stick to `DDD` and `Clean Architecture`. Hence some 
 `Apache Kafka Consumer service` - is a python project `path=./consumer` a dedicated service on a dedicated container environmet, listening for message broker on a certain topic, consuming broker's produced messages as a seperate service.
 
 
+## Endpoints design
+
+<br />
+<br />
+<div align="center">
+  <a href="img/use-case.png">
+    <img src="img/endpoints.png">
+  </a>
+
+<br />
+
+## Use-case scenario system design visualization
+
+<br />
+<br />
+<div align="center">
+  <a href="img/use-case.png">
+    <img src="img/use-case.png">
+  </a>
+
+<br />
 
 
+## Entity-relations diagram visualization
 
+<br />
+<br />
+<div align="center">
+  <a href="img/erd.png">
+    <img src="img/erd.png">
+  </a>
 
-
-
+<br />
 
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
+How to set up your project locally.
 To get a local copy up and running follow these simple example steps.
+First, clone the repository.
 Docker Deamon is used to manage project deployments.
 
 ### Prerequisites
@@ -204,7 +232,7 @@ Navigate `http://0.0.0.0:8000` - in the browser, you will automatically redirect
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Arif Garayev - [Email](mailto:garayevarif@gmail.com)
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+Project Link: [Repository](https://github.com/arifgarayev/remofirst)
 
