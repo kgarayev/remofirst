@@ -25,7 +25,7 @@ services:
 
 
     image: 'wurstmeister/kafka:2.13-2.8.1'
-    container_name: database
+    container_name: kafka
     build:
       context: .
       dockerfile: ./ci/kafka.Dockerfile

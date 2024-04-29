@@ -1,5 +1,5 @@
 Dockerfile
-Makefile
 docker-compose.yml
 ci/
 volumes/
+.venv

@@ -1,3 +1,4 @@
+import time
 import websocket
 import json
 import os
@@ -43,9 +44,8 @@ class KafkaConsume(KafkaConsumer):
             print('WS message sent')
         except Exception as e:
             print(e)
+
         
-        finally:
-            ws.close()
     
     def listen(self, model_cls):
 
@@ -63,7 +63,7 @@ class KafkaConsume(KafkaConsumer):
                 self.add_to_table(model_cls, message_deserializer)
                 self.send_to_ws(message_deserializer,
                                 message_deserializer.get('SENDER_CLIENT_COOKIES'),
-                                'ws://127.0.0.1:8000/ws/chat/%s' % message_deserializer.get('chat_session_id'))
+                                f'ws://{os.getenv("DJANGO_CORE_HOST")}:8000/ws/chat/%s' % message_deserializer.get('chat_session_id'))
 
 
 
@@ -81,10 +81,14 @@ value={
 
 if __name__ == "__main__":
 
-    load_dotenv('.env')
+    load_dotenv('./.env', override=True)
 
-    print(os.getenv('DB_CONN_STRING'))
+    # print(os.getenv('DB_CONN_STRING'))
 
+    print(os.getenv("KAFKA_BOOTSTRAP_SERVERS"))
+    print(os.getenv("KAFKA_TOPIC"))
+
+    time.sleep(10)
 
     kafka_consumer = KafkaConsume(
         topic=os.getenv("KAFKA_TOPIC"),

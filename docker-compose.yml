@@ -23,6 +23,104 @@ services:
       timeout: 10s
       retries: 5
 
+  core:
+    
+    image: django_core
+    container_name: django_core
+
+    build:
+      target: DJANGO_CORE
+      context: .
+      dockerfile: ./ci/api.Dockerfile
+
+      args:
+        DJANGO_ENV: production
+      
+    restart: unless-stopped
+    
+    ports:
+      - 8000:8000
+    
+    env_file: ./.env
+    
+    depends_on:
+      - database
+      - kafka_consumer_service
+  
+    # command: python3 -m gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -b 0.0.0.0:8000 core.infrastructure.wsgi -w 2
+
+    command: python3 manage.py runserver 0.0.0.0:8000
+
+
+    volumes: 
+      - ./volumes/app_static:/usr/src/static
+      - ./django_logs:/usr/src/logs
+
+  kafka_consumer_service:
+    image: kafka_consumer_service
+    container_name: kafka_consumer_service
+    build:
+      context: .
+      dockerfile: ./ci/consumer.Dockerfile
+    
+    env_file: ./consumer/.env
+    depends_on:
+      - kafka
+      - database
+
+    restart: unless-stopped
+
+    command: python3 kafka_consumer.py
+
+
+  zookeeper:
+    
+    image: zookeeper:3.5.9
+    container_name: zookeeper
+    
+    restart: unless-stopped
+    
+    build:
+      context: .
+      dockerfile: ./ci/zookeeper.Dockerfile
+
+    ports:
+      - '2181:2181'
+
+
+  kafka:
+    
+    depends_on:
+      - zookeeper
+    
+    # links:
+    #   - zookeeper
+    restart: unless-stopped
+
+    image: 'wurstmeister/kafka:2.13-2.8.1'
+    container_name: kafka
+    build:
+      context: .
+      dockerfile: ./ci/kafka.Dockerfile
+
+    # env_file: .env
+
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_CREATE_TOPICS: 'send_message:1:1'
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:29092
+
+    ports:
+      - '29092:29092'
+
+    volumes:
+      - './volumes/kafka/docker.sock:/var/run/docker.sock'
+
+
 
 networks:
   common:
