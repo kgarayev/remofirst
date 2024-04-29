@@ -7,4 +7,3 @@ urlpatterns = [
     path("logout/", LogoutUser.as_view(), name="logout-user"),
     path("get-cookies", GetCookies.as_view(), name="get-cookies"),
 ]
-

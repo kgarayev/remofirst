@@ -1,7 +1,7 @@
-from django.shortcuts import redirect
 from api.user.domain.models.models import User as UserModel
 from api.user.domain.serializers.entities import LoginSerializer, RegisterUserSerializer, UserSerializer
 from django.contrib.auth import authenticate, login
+from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.authentication import SessionAuthentication
@@ -73,5 +73,3 @@ class GetCookies(APIView):
 
 def handler(request, *args, **argv):
     return redirect("/")
-
-

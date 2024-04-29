@@ -1,5 +1,5 @@
 import os
-import multiprocessing 
+
 import api.chat.websocket
 import api.chat.websocket.routers
 from api.chat.broker.kafka_consumer import KafkaConsume
@@ -23,9 +23,7 @@ application = ProtocolTypeRouter(
 
 # init kafka consumer
 kafka_consumer = KafkaConsume(
-    topic=os.getenv("KAFKA_TOPIC"),
-    bootstrap_servers=os.getenv("KAFKA_BOOTSTRAP_SERVERS"),
-    client_id=os.getenv("KAFKA_PRODUCER_CLIENT_ID")
+    topic=os.getenv("KAFKA_TOPIC"), bootstrap_servers=os.getenv("KAFKA_BOOTSTRAP_SERVERS"), client_id=os.getenv("KAFKA_PRODUCER_CLIENT_ID")
 )
 
 

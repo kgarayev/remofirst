@@ -5,7 +5,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 # call the load_dotenv() function
-load_dotenv(".env")
+load_dotenv(".env", override=True)
 
 ENV_PREFIX = "DJANGO_"
 DATABASE_PREFIX = "POSTGRES_"
@@ -35,10 +35,10 @@ else:
 
 
 # no domain-name, only local development
-ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]", "nginx", "0.0.0.0"]
+ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]", "nginx", "0.0.0.0", "*"]
 
 
-INTERNAL_IPS = ["127.0.0.1"]
+INTERNAL_IPS = ["127.0.0.1", "*"]
 
 
 # Application definition
@@ -112,7 +112,7 @@ DATABASES = {
         "NAME": os.getenv(f"{DATABASE_PREFIX}DB"),
         "USER": os.getenv(f"{DATABASE_PREFIX}USER"),
         "PASSWORD": os.getenv(f"{DATABASE_PREFIX}PASSWORD"),
-        "HOST": "127.0.0.1",
+        "HOST": os.getenv(f"DB_HOST"),
         "PORT": "5432",
     }
 }
@@ -207,11 +207,7 @@ LOGGING = {
     },
 }
 
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
-}
+CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
 
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
@@ -235,6 +231,3 @@ AUTH_USER_MODEL = "user.User"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 ASGI_APPLICATION = "core.infrastructure.asgi.application"
-
-
-

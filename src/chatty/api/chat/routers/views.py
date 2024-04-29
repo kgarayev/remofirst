@@ -1,4 +1,5 @@
 import os
+
 from api.chat.domain.serializers.serializers import MessageSerializer, SendMessageSerializer, SessionSerializer
 from api.chat.models import Message, Session
 from django.utils.decorators import method_decorator
