@@ -44,9 +44,9 @@ services:
 
     env_file: ./.env
 
-    depends_on:
+    depends_on: # Ensuring core depends on both database and kafka
       - database
-      - kafka_consumer_service
+      - kafka
 
     # command: python3 -m gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -b 0.0.0.0:8000 core.infrastructure.wsgi -w 2
 
@@ -67,7 +67,7 @@ services:
       dockerfile: ./ci/consumer.Dockerfile
 
     env_file: ./consumer/.env
-    depends_on:
+    depends_on: # Ensuring kafka_consumer_service depends on both kafka and database
       - kafka
       - database
 
@@ -128,4 +128,4 @@ services:
 networks:
   common:
     name: bridge
-    driver: custom-bridge
+    driver: bridge # Fixed the driver name from custom-bridge to bridge
