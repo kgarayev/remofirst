@@ -42,6 +42,9 @@ RUN poetry install
 # copy project
 COPY ./src/chatty .
 
+# Create log directory and file
+RUN mkdir -p /usr/src/log && touch /usr/src/log/debug.log
+
 RUN python3 manage.py collectstatic --noinput
 
 RUN chmod +x ./entrypoint.sh
