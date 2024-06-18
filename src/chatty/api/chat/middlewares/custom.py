@@ -33,3 +33,6 @@ class ApplyKafkaProducerMiddleware(MiddlewareMixin):
         response = self.get_response(request)
 
         return response
+
+
+salam = ApplyKafkaProducerMiddleware()

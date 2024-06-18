@@ -14,7 +14,6 @@ services:
 
     volumes:
       - ./volumes/db:/var/lib/postgresql/data
-
     ports:
       - "5432:5432"
 
@@ -44,9 +43,10 @@ services:
 
     env_file: ./.env
 
-    depends_on: # Ensuring core depends on both database and kafka
+    depends_on:
       - database
-      - kafka
+      - kafka # NEW UPDATE
+      - kafka_consumer_service
 
     # command: python3 -m gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -b 0.0.0.0:8000 core.infrastructure.wsgi -w 2
 
@@ -67,8 +67,9 @@ services:
       dockerfile: ./ci/consumer.Dockerfile
 
     env_file: ./consumer/.env
-    depends_on: # Ensuring kafka_consumer_service depends on both kafka and database
+    depends_on:
       - kafka
+      - zookeeper
       - database
 
     restart: unless-stopped
@@ -128,4 +129,4 @@ services:
 networks:
   common:
     name: bridge
-    driver: bridge # Fixed the driver name from custom-bridge to bridge
+    driver: bridge
